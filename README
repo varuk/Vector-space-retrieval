@@ -1,56 +1,21 @@
-The objective of this assignment is to create an Information Retrieval (IR) system based on a
-vector space model in python. This assignment was tested on a small benchmark collection from TREC. This assignment is divided into three parts:
+The objective of this assignment is to create an Information Retrieval (IR) system based on a vector space model in python. This assignment was tested on a small benchmark collection from TREC. This assignment is divided into three parts:
 1. invidx_cons.py
 Synopsis: invidx_cons.py collpath indexfile
-This program creates inverted indexing for the IR system and stores it into two files
-namely:
-1. indexfile.dict – stores a dictionary where term is key and a tuple of document
-frequency and byte offset for its posting list in indexfile.idx is the corresponding value.
-2. indexfile.idx – stores posting lists for each term. Every list contains tuples of document
-id and normalised tf*idf weight.
-This program works by reading the text data from the files in collpath directory and
-converting it into a list of tokens. Regex is used extensively to filter out certain
-characters. All tokens are preprocessed using case lowering, stopword and punctuation
-removal. Tokens other than named entity tokens are also sent through a lemmatizer from
-nltk.
-Named Entities : The named entity tokens are stored with the tag in the dictionary in
-this notation: x + “ “ + token where x = l for location ; x=p for person and x=o for
-organisation. Named entities are also stored as whole. For example: for L:United States,
-one can find ‘l united’; ‘l states’ and ‘l united states’. These are also stored without the
-entity tag in order to create a more general model. For the previous example, one can
-also find ‘united’ and ‘states’ in the dictionary.
-Tf-idf weights : The normalised tf-idf weights are stored inthe inverted index posting
-lists. These are created by iterating over a normal index dictionary(to get the document
-vector and corresponding term frequencies) and inverted index dictionary(to get the
-document frequency for each term). This tf*idf weight is then normalised in order to
-create a unit vector to be used later for computing cosine similarity.
-Storage : Pickle is used for dumping objects into binary files. One file contains a tuple of
-dictionary and N(total number of documents). Another files contains a series of posting
-lists dumped one after another.
+This program creates inverted indexing for the IR system and stores it into two files namely:
+1. indexfile.dict – stores a dictionary where term is key and a tuple of document frequency and byte offset for its posting list in indexfile.idx is the corresponding value.
+2. indexfile.idx – stores posting lists for each term. Every list contains tuples of document id and normalised tf*idf weight.
+This program works by reading the text data from the files in collpath directory and converting it into a list of tokens. Regex is used extensively to filter out certaicharacters. All tokens are preprocessed using case lowering, stopword and punctuation removal. Tokens other than named entity tokens are also sent through a lemmatizer from nltk.
+Named Entities : The named entity tokens are stored with the tag in the dictionary in this notation: x + “ “ + token where x = l for location ; x=p for person and x=o for organisation. Named entities are also stored as whole. For example: for L:United States, one can find ‘l united’; ‘l states’ and ‘l united states’. These are also stored without the entity tag in order to create a more general model. For the previous example, one can also find ‘united’ and ‘states’ in the dictionary.
+Tf-idf weights : The normalised tf-idf weights are stored inthe inverted index posting lists. These are created by iterating over a normal index dictionary(to get the document vector and corresponding term frequencies) and inverted index dictionary(to get the document frequency for each term). This tf*idf weight is then normalised in order to create a unit vector to be used later for computing cosine similarity.
+Storage : Pickle is used for dumping objects into binary files. One file contains a tuple of dictionary and N(total number of documents). Another files contains a series of posting lists dumped one after another.
 2. printdict.py
 Synopsis: printdict.py indexfile.dict
-It loads the dictionary object from the pickle file and iterates over it to print out the
-dictionary in the following format:
+It loads the dictionary object from the pickle file and iterates over it to print out the dictionary in the following format:
 <term>:<df>:<offset>
 3. vecsearch.py
 Synopsis: vecsearch.py queryfile k resultfile indexfile dictfile
-This program retrieves the top k documents ranked according to a similarity score given
-by the built vector space model. First of all the queries are read from the queryfile and a
-dictionary is formed with qid as key and query as value.
-Query preprocessing: query is tokenised and then case lowered with stopwords and
-punctuation removed. Regex is used to filter out certain unwanted characters. Each
-token is analysed for named entity(N: or L: or P: or O:) and prefixsearch (*) . All other
-tokens are lemmatised.
-Prefix search: A function is called implementing binary search on sorted keys of
-a dictionary which gives a floor index ie a word which is just greater than or equal
-to the given prefix token. Starting from this index, the keys are linearly iterated
-until there is no longer a prefix match.
-Named entities: If a token is a named entity, it is first of all converted into the
-desired format that is (‘p ’ + token or ‘o ’ + token or ‘l ’ + token ), then looked for in
-the dictionary.
-TF-IDF: After getting a dictionary of tokens with their corresponding frequencies,
-its tf-idf weights are calculated and returned.
-Ranking: Cosine similarity score for each document is calculated using the normalisd
-weights obtained. The documents with more number of query terms are given preference
-in ranking against those with less number of terms. The top k documents are written into
-the results file.
+This program retrieves the top k documents ranked according to a similarity score given by the built vector space model. First of all the queries are read from the queryfile and a dictionary is formed with qid as key and query as value. Query preprocessing: query is tokenised and then case lowered with stopwords and punctuation removed. Regex is used to filter out certain unwanted characters. Each token is analysed for named entity(N: or L: or P: or O:) and prefixsearch (*) . All other tokens are lemmatised.
+Prefix search: A function is called implementing binary search on sorted keys of a dictionary which gives a floor index ie a word which is just greater than or equal to the given prefix token. Starting from this index, the keys are linearly iterated until there is no longer a prefix match.
+Named entities: If a token is a named entity, it is first of all converted into the desired format that is (‘p ’ + token or ‘o ’ + token or ‘l ’ + token ), then looked for in the dictionary.
+TF-IDF: After getting a dictionary of tokens with their corresponding frequencies, its tf-idf weights are calculated and returned.
+Ranking: Cosine similarity score for each document is calculated using the normalisd weights obtained. The documents with more number of query terms are given preference in ranking against those with less number of terms. The top k documents are written into the results file.
