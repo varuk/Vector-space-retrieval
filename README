@@ -1,3 +1,6 @@
+
+This code was written in python=3.7.6 and is comptabile with python < 3.9.0. In addition to the standard library packages of python, this project uses other packages mentioned in requirements.txt.
+To install, use 'make' command on terminal. 
 The objective of this assignment is to create an Information Retrieval (IR) system based on a vector space model in python. This assignment was tested on a small benchmark collection from TREC. This assignment is divided into three parts:
 1. invidx_cons.py
 Synopsis: invidx_cons.py collpath indexfile
